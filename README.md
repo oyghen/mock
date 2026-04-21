@@ -30,3 +30,11 @@ $ uv version --bump minor --package mocklib
 $ uv version --bump minor --package mockcli
 # mockcli 0.0.0 => 0.1.0
 ```
+
+```shell
+git tag -a v0.2.0 -m v0.2.0
+```
+
+```shell
+git push --tags
+````
