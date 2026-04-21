@@ -6,32 +6,8 @@ on:
       - 'v*'
 
 jobs:
-  build:
-    name: Build release artifacts
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v7
-      - run: uv python install 3.12
-      - run: uv sync --all-packages
-      - working-directory: packages/mocklib
-        run: uv build --no-sources
-      - working-directory: packages/mockcli
-        run: uv build --no-sources
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mocklib-dist
-          path: packages/mocklib/dist/*
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mockcli-dist
-          path: packages/mockcli/dist/*
-
-  pypi-lib:
-    name: Publish library to PyPI
-    needs: build
+  mocklib:
+    name: Build and publish library
     runs-on: ubuntu-latest
     environment:
       name: pypi-lib
@@ -39,26 +15,26 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v7
-      - uses: actions/download-artifact@v4
-        with:
-          name: mocklib-dist
-          path: dist
-      - run: uv publish dist/*
+      - run: uv python install
+      - run: uv sync --locked --all-extras --package mocklib
+      - run: uv build
+      - run: uv publish
 
-  pypi-cli:
-    name: Publish cli app to PyPI
-    needs: pypi-lib
+  mockcli:
+    name: Build and publish cli app
     runs-on: ubuntu-latest
+    needs: mocklib
     environment:
       name: pypi-cli
     permissions:
       id-token: write
       contents: read
     steps:
+      - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v7
-      - uses: actions/download-artifact@v4
-        with:
-          name: mockcli-dist
-          path: dist
-      - run: uv publish dist/*
+      - run: uv python install
+      - run: uv sync --locked --all-extras --package mocklib
+      - run: uv build --no-sources
+      - run: uv publish
