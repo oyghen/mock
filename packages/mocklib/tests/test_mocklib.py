@@ -9,4 +9,4 @@ def test_project_name(project_name: str, project_pkg: ModuleType):
 
 def test_project_version(project_name: str, project_pkg: ModuleType):
     assert project_pkg.__version__ == metadata.version(project_name)
-    assert project_pkg.__version__ == "0.0.0"
+    assert project_pkg.__version__ == "0.1.0"
