@@ -1,7 +1,7 @@
 import typer
 from mocklib.core import hello
 
-app = typer.Typer()
+app = typer.Typer(add_completion=False)
 
 
 @app.command()
