@@ -1,0 +1,25 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[manifest]
+members = [
+    "mock",
+    "mockcli",
+    "mocklib",
+]
+
+[[package]]
+name = "mock"
+version = "0.1.0"
+source = { virtual = "." }
+
+[[package]]
+name = "mockcli"
+version = "0.1.0"
+source = { editable = "packages/mockcli" }
+
+[[package]]
+name = "mocklib"
+version = "0.1.0"
+source = { editable = "packages/mocklib" }
