@@ -1,2 +1,5 @@
-def hello() -> str:
-    return "Hello from mocklib!"
+__all__ = ["__version__"]
+
+from importlib import metadata
+
+__version__ = metadata.version(__name__)

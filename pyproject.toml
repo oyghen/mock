@@ -1,11 +1,20 @@
 [project]
-name = "mock"
+name = "mock-workspace"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = []
+
+[tool.uv]
+package = false
 
 [tool.uv.workspace]
 members = [
     "packages/mocklib",
     "packages/mockcli",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "ruff>=0.15.11",
 ]
