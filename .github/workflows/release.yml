@@ -28,10 +28,10 @@ jobs:
         run: uv python install
 
       - name: Sync workspace
-        run: uv sync --all-packages --all-extras --locked
+        run: uv sync --locked --all-packages --all-extras
 
       - name: Build all packages
-        run: uv build --all-packages --no-sources
+        run: uv build --no-sources --all-packages
 
       - name: Smoke test (wheel)
         run: |
