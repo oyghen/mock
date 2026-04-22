@@ -7,7 +7,7 @@ on:
 
 jobs:
   library-release:
-    name: Build and publish library
+    name: Publish library to PyPI
     runs-on: ubuntu-latest
     environment:
       name: pypi-lib
@@ -20,10 +20,14 @@ jobs:
       - run: uv python install
       - run: uv sync --locked --all-extras --package mocklib
       - run: uv build --package mocklib
+      - name: Smoke test (wheel)
+        run: uv run --isolated --no-project --with dist/*.whl packages/mocklib/tests/smoke_test.py
+      - name: Smoke test (source distribution)
+        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mocklib/tests/smoke_test.py
       - run: uv publish
 
   cli-release:
-    name: Build and publish cli app
+    name: Publish CLI app to PyPI
     runs-on: ubuntu-latest
     needs: library-release
     environment:
@@ -37,4 +41,8 @@ jobs:
       - run: uv python install
       - run: uv sync --locked --all-extras --package mockcli
       - run: uv build --no-sources --package mockcli
+      - name: Smoke test (wheel)
+        run: uv run --isolated --no-project --with dist/*.whl packages/mockcli/tests/smoke_test.py
+      - name: Smoke test (source distribution)
+        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mockcli/tests/smoke_test.py
       - run: uv publish
