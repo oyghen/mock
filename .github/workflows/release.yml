@@ -21,9 +21,9 @@ jobs:
       - run: uv sync --locked --all-extras --package mocklib
       - run: uv build --package mocklib
       - name: Smoke test (wheel)
-        run: uv run --isolated --no-project --with dist/*.whl packages/mocklib/tests/smoke_test.py
+        run: uv run --isolated --no-project --with dist/*.whl packages/mocklib/tests/smoke_test_lib.py
       - name: Smoke test (source distribution)
-        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mocklib/tests/smoke_test.py
+        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mocklib/tests/smoke_test_lib.py
       - run: uv publish
 
   cli-release:
@@ -42,7 +42,7 @@ jobs:
       - run: uv sync --locked --all-extras --package mockcli
       - run: uv build --no-sources --package mockcli
       - name: Smoke test (wheel)
-        run: uv run --isolated --no-project --with dist/*.whl packages/mockcli/tests/smoke_test.py
+        run: uv run --isolated --no-project --with dist/*.whl packages/mockcli/tests/smoke_test_cli.py
       - name: Smoke test (source distribution)
-        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mockcli/tests/smoke_test.py
+        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mockcli/tests/smoke_test_cli.py
       - run: uv publish

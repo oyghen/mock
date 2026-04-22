@@ -10,7 +10,7 @@
         {
             "label": "pytest",
             "type": "shell",
-            "command": "uv run pytest --verbose --ignore=user",
+            "command": "uv run pytest --doctest-modules --verbose --ignore=user",
             "problemMatcher": []
         }
     ]

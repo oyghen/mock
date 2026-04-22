@@ -1,7 +1,7 @@
 import mocklib
 
 
-def main():
+def main() -> None:
     result = mocklib.__name__
     expected = "mocklib"
     if result == expected:
