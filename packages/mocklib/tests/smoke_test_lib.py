@@ -5,9 +5,9 @@ def main() -> None:
     result = mocklib.__name__
     expected = "mocklib"
     if result == expected:
-        print("Smoke test: PASSED")
+        print(f"Smoke test for {mocklib.__name__}: PASSED")
     else:
-        raise RuntimeError("Smoke test: FAILED")
+        raise RuntimeError(f"Smoke test for {mocklib.__name__}: FAILED")
 
 
 if __name__ == "__main__":
