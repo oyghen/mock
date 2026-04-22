@@ -6,43 +6,54 @@ on:
       - 'v*'
 
 jobs:
-  library-release:
-    name: Publish library to PyPI
+  release:
+    name: Publish library and CLI app to PyPI
     runs-on: ubuntu-latest
-    environment:
-      name: pypi-lib
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v7
-      - run: uv python install
-      - run: uv sync --locked --all-extras --package mocklib
-      - run: uv build --package mocklib
-      - name: Smoke test (wheel)
-        run: uv run --isolated --no-project --with dist/*.whl packages/mocklib/tests/smoke_test_lib.py
-      - name: Smoke test (source distribution)
-        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mocklib/tests/smoke_test_lib.py
-      - run: uv publish
 
-  cli-release:
-    name: Publish CLI app to PyPI
-    runs-on: ubuntu-latest
-    needs: library-release
     environment:
-      name: pypi-cli
+      name: pypi
+
     permissions:
       id-token: write
       contents: read
+
     steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v7
-      - run: uv python install
-      - run: uv sync --locked --all-extras --package mockcli
-      - run: uv build --no-sources --all-packages
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install Python
+        run: uv python install
+
+      - name: Sync workspace
+        run: uv sync --all-packages --all-extras --locked
+
+      - name: Build all packages
+        run: uv build --all-packages --no-sources
+
       - name: Smoke test (wheel)
-        run: uv run --isolated --no-project --with dist/*.whl packages/mockcli/tests/smoke_test_cli.py
+        run: |
+          uv run --isolated --no-project \
+            --with dist/mocklib-*.whl \
+            packages/mocklib/tests/smoke_test_lib.py
+
+          uv run --isolated --no-project \
+            --with dist/mocklib-*.whl \
+            --with dist/mockcli-*.whl \
+            packages/mockcli/tests/smoke_test_cli.py
+
       - name: Smoke test (source distribution)
-        run: uv run --isolated --no-project --with dist/*.tar.gz packages/mockcli/tests/smoke_test_cli.py
-      - run: uv publish
+        run: |
+          uv run --isolated --no-project \
+            --with dist/mocklib-*.tar.gz \
+            packages/mocklib/tests/smoke_test_lib.py
+
+          uv run --isolated --no-project \
+            --with dist/mocklib-*.tar.gz \
+            --with dist/mockcli-*.tar.gz \
+            packages/mockcli/tests/smoke_test_cli.py
+
+      - name: Publish all packages
+        run: uv publish
