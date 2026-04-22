@@ -35,6 +35,8 @@ jobs:
 
       - name: Smoke test (wheel)
         run: |
+          set -euo pipefail
+
           uv run --isolated --no-project \
             --with dist/mocklib-*.whl \
             packages/mocklib/tests/smoke_test_lib.py
@@ -46,6 +48,8 @@ jobs:
 
       - name: Smoke test (source distribution)
         run: |
+          set -euo pipefail
+
           uv run --isolated --no-project \
             --with dist/mocklib-*.tar.gz \
             packages/mocklib/tests/smoke_test_lib.py
