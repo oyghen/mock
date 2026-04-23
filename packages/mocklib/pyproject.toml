@@ -1,6 +1,6 @@
 [project]
 name = "mocklib"
-version = "0.6.0"
+version = "0.7.0"
 description = "mock library"
 readme = "README.md"
 authors = [
