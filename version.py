@@ -2,6 +2,7 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
+#   "purekit",
 #   "typer",
 # ]
 # ///
@@ -13,6 +14,7 @@ from enum import StrEnum, auto
 from pathlib import Path
 from typing import Annotated
 
+import purekit as pk  # type: ignore
 import typer
 
 LIB_NAME = "mocklib"
@@ -58,7 +60,8 @@ def main(
     refresh_lockfile()
     commit_bump(bumped_version)
     tag_commit(bumped_version)
-    typer.echo("Run if success: git push && git push --tags")
+    typer.echo(pk.text.headline(typer.style("if successful", fg=typer.colors.YELLOW)))
+    typer.echo("git push && git push --tags")
 
 
 def bump_versions(bumps: list[BumpType]) -> None:
