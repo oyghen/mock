@@ -1,4 +1,4 @@
 # mock
 
-- [mocklib](packages/mocklib/README.md)
-- [mockcli](packages/mockcli/README.md)
+- Project library: [mocklib](packages/mocklib/README.md)
+- Project CLI app: [mockcli](packages/mockcli/README.md)
