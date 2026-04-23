@@ -10,7 +10,16 @@
         {
             "label": "pytest",
             "type": "shell",
-            "command": "uv run pytest --doctest-modules --verbose --ignore=user",
+            "command": "uv",
+            "args": [
+                "run",
+                "--no-sync",
+                "pytest",
+                "--verbose",
+                "--doctest-modules",
+                "--ignore=user",
+                "--ignore=version.py"
+            ],
             "problemMatcher": []
         }
     ]
