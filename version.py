@@ -56,8 +56,9 @@ def main(
     check_versions(bumped_version)
     update_dependency_pin(bumped_version)
     refresh_lockfile()
-    typer.echo("-" * 60)
-    typer.echo(f"chore(release): bump version to v{bumped_version}")
+    commit_bump(bumped_version)
+    tag_commit(bumped_version)
+    typer.echo("Run if success: git push && git push --tags")
 
 
 def bump_versions(bumps: list[BumpType]) -> None:
@@ -120,6 +121,31 @@ def replace_exact_pin(text: str, package: str, version: str) -> str:
 def refresh_lockfile() -> None:
     """Regenerate the uv lockfile."""
     run("uv", "lock")
+
+
+def commit_bump(version: str) -> None:
+    """Stage changed files and commit the version bump."""
+    prefix = typer.style("Created commit", fg=typer.colors.GREEN, bold=True)
+    message = f"chore(release): bump version to v{version}"
+
+    # Stage only the files this script mutates
+    files = (ROOT_PYPROJECT, LIB_PYPROJECT, CLI_PYPROJECT, "uv.lock")
+    for file_name in files:
+        run("git", "add", str(file_name))
+
+    run("git", "commit", "-m", message)
+
+    typer.echo(f"{prefix} {message}")
+
+
+def tag_commit(version: str) -> None:
+    """Create an annotated release tag for the version."""
+    prefix = typer.style("Created tag", fg=typer.colors.GREEN, bold=True)
+    tag = f"v{version}"
+
+    run("git", "tag", "-a", tag, "-m", tag)
+
+    typer.echo(f"{prefix} {tag}")
 
 
 def run(*args: str) -> None:
